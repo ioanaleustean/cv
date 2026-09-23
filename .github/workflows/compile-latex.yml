@@ -1,0 +1,28 @@
+name: Compile LaTeX and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Rulează automat la fiecare push pe branch-ul principal
+
+permissions:
+  contents: write  # Permite scriptului să scrie în branch-ul gh-pages
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git Repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: cv.tex  # Trebuie să coincidă cu numele fișierului tău .tex
+
+      - name: Deploy PDF to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_files: cv.pdf  # Doar acest fișier va fi trimis online
